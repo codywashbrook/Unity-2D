@@ -15,8 +15,14 @@ public class PlayerMovement_2D : MonoBehaviour
     [Space]
     [Header("References:")]
     public Rigidbody2D rb;
+    public Animator animator;
     
-    
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -24,7 +30,14 @@ public class PlayerMovement_2D : MonoBehaviour
         movementSpeed = Mathf.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
         movementDirection.Normalize();
         Move();
-      
+        Animate();
+
+        //Sets the idle to the last direction moved
+        if (Input.GetAxis("Horizontal") >= 0.1f || Input.GetAxis("Horizontal") <= -0.1f || Input.GetAxis("Vertical") >= 0.1f || Input.GetAxis("Vertical") <= -0.1f)
+        {
+            animator.SetFloat("LastMoveX", Input.GetAxis("Horizontal"));
+            animator.SetFloat("LastMoveY", Input.GetAxis("Vertical"));
+        }
 
 
     }
@@ -34,6 +47,11 @@ public class PlayerMovement_2D : MonoBehaviour
         rb.velocity = movementDirection * movementSpeed * speedMultiplier;
     }
 
-   
+    void Animate()
+    {
+        animator.SetFloat("Horizontal", movementDirection.x);
+        animator.SetFloat("Vertical", movementDirection.y);
+        animator.SetFloat("Speed", movementSpeed);
+    }
 
 }
